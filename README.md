@@ -59,6 +59,40 @@ Il file raspi_match_server.py è stato aggiornato con:
 
 📸 Acquisizione immagine con libcamera
 
+________________________________________________
+
+Procedura di lancio :
+
+Sul Laptop, avvia prima il server Flask per l’analisi:
+
+python face_analysis_server.py
+
+Ora il laptop è in ascolto sulla porta 5000 e pronto a ricevere foto.
+
+Assicurati che rimanga attivo (non chiudere il terminale).
+
+Sul Raspberry Pi, lancia il server Flask con camera e led:
+
+python3 raspi_match_server.py
+
+A questo punto, il Raspberry è pronto a ricevere richieste su http://<IP_PI>:8080/scan.
+
+Avvio del processo di riconoscimento:
+
+Invia una richiesta al Raspberry (da un altro terminale, cron, sensore o script sul laptop) con:
+
+curl http://<IP_DEL_PI>:8080/scan
+Il Raspberry scatta la foto, la invia al laptop, riceve il risultato e accende il LED corrispondente.
+
+⚠️ Cosa succede in ordine:
+Il laptop deve essere pronto a ricevere (face_analysis_server.py)
+
+Il Raspberry deve poter reindirizzare le foto (raspi_match_server.py)
+
+Il comando curl (o uno script) riavvia il ciclo di scatto → invio → risultato → LED
+
+
+
 📤 Invio al laptop per analisi
 
 💡 Controllo dei LED su GPIO 17 (MATCH) e 22 (NO MATCH)
