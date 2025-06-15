@@ -15,14 +15,21 @@ led_no_match = LED(22)
 
 # === Funzione: scatta con libcamera ===
 def capture_photo():
-    print("\U0001F4F8 Scatto foto...")
+    print("📸 Scatto foto con libcamera-still...")
     result = subprocess.run([
-        "libcamera-jpeg", "-o", PHOTO_PATH, "--width", "640", "--height", "480", "--nopreview"
+        "libcamera-still",
+        "-t", "1000",         # 1 secondo per stabilizzare
+        "--nopreview",        # Nessuna preview grafica
+        "--width", "640",     # Risoluzione stabile
+        "--height", "480",
+        "-o", PHOTO_PATH
     ], capture_output=True)
+
     if result.returncode != 0:
-        print("❌ Errore libcamera:", result.stderr.decode())
+        print("❌ Errore libcamera-still:", result.stderr.decode())
         return False
-    return True
+
+    return Path(PHOTO_PATH).exists()
 
 # === Funzione: spegne i LED ===
 def turn_off_leds():
